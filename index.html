@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educational Theory Assistant for Action Research</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState } = React;
+        
+        // Lucide React icons as components
+        const Send = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+        );
+        
+        const Book = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+        );
+        
+        const User = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+        );
+        
+        const Info = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+        );
+
+        const EducationalTheoryBot = () => {
+          const [messages, setMessages] = useState([
+            {
+              type: 'bot',
+              content: "Hello! I'm here to help you connect relevant educational learning theories to your Problem of Practice (PoP) for your action research dissertation.\n\nTo get started, could you please share your Problem of Practice? This should be a clear statement of the specific issue or challenge you're addressing in your educational setting.",
+              timestamp: new Date()
+            }
+          ]);
+          
+          const [input, setInput] = useState('');
+          const [stage, setStage] = useState('awaitingPoP');
+          const [popData, setPopData] = useState('');
+          const [contextData, setContextData] = useState('');
+          const [selectedTheory, setSelectedTheory] = useState(null);
+          const [theoryListVersion, setTheoryListVersion] = useState(1);
+
+          const theories = {
+            1: [
+              {
+                name: "Social Constructivism",
+                researchers: ["Lev Vygotsky", "Jerome Bruner"],
+                relevance: "collaborative learning and peer interaction challenges"
+              },
+              {
+                name: "Culturally Responsive Teaching",
+                researchers: ["Geneva Gay", "Gloria Ladson-Billings"],
+                relevance: "addressing diverse student backgrounds and cultural disconnects"
+              },
+              {
+                name: "Self-Determination Theory",
+                researchers: ["Edward Deci", "Richard Ryan"],
+                relevance: "student motivation and engagement issues"
+              },
+              {
+                name: "Communities of Practice",
+                researchers: ["Etienne Wenger", "Jean Lave"],
+                relevance: "building collaborative learning environments"
+              },
+              {
+                name: "Transformative Learning Theory",
+                researchers: ["Jack Mezirow", "Patricia Cranton"],
+                relevance: "changing perspectives and critical reflection"
+              }
+            ],
+            2: [
+              {
+                name: "Experiential Learning Theory",
+                researchers: ["David Kolb", "John Dewey"],
+                relevance: "hands-on learning and practical application"
+              },
+              {
+                name: "Critical Pedagogy",
+                researchers: ["Paulo Freire", "Henry Giroux"],
+                relevance: "addressing power dynamics and social justice in education"
+              },
+              {
+                name: "Universal Design for Learning",
+                researchers: ["David Rose", "Anne Meyer"],
+                relevance: "accessibility and inclusive instructional design"
+              },
+              {
+                name: "Funds of Knowledge",
+                researchers: ["Luis Moll", "Norma González"],
+                relevance: "leveraging students' home and community resources"
+              },
+              {
+                name: "Activity Theory",
+                researchers: ["Yrjö Engeström", "Alexei Leont'ev"],
+                relevance: "understanding complex educational systems and interactions"
+              }
+            ]
+          };
+
+          const theoryDetails = {
+            "Social Constructivism": {
+              overview: "Social constructivism emphasizes that learning is a collaborative process where knowledge is constructed through social interaction and cultural tools.",
+              principles: ["Zone of Proximal Development", "Scaffolding", "Collaborative Learning", "Language as a tool for thought"],
+              applications: "This theory has been widely applied in cooperative learning settings, peer tutoring programs, and collaborative project-based learning.",
+              seminalWorks: ["Mind in Society (Vygotsky, 1978)", "The Process of Education (Bruner, 1960)"]
+            },
+            "Culturally Responsive Teaching": {
+              overview: "Culturally responsive teaching recognizes the importance of including students' cultural references in all aspects of learning.",
+              principles: ["Cultural competence", "High expectations for all students", "Critical consciousness", "Inclusive curriculum"],
+              applications: "Successfully implemented in diverse classrooms to improve engagement and achievement among marginalized student populations.",
+              seminalWorks: ["Culturally Responsive Teaching (Gay, 2018)", "The Dreamkeepers (Ladson-Billings, 1994)"]
+            },
+            "Self-Determination Theory": {
+              overview: "SDT focuses on human motivation and personality, emphasizing the role of autonomy, competence, and relatedness in fostering intrinsic motivation.",
+              principles: ["Autonomy support", "Competence building", "Relatedness", "Intrinsic vs. extrinsic motivation"],
+              applications: "Applied in educational settings to design learning environments that support student autonomy and foster intrinsic motivation.",
+              seminalWorks: ["Self-Determination Theory (Deci & Ryan, 2017)", "Intrinsic Motivation and Self-Determination (Deci & Ryan, 2002)"]
+            }
+          };
+
+          const handleSendMessage = () => {
+            if (!input.trim()) return;
+
+            const userMessage = {
+              type: 'user',
+              content: input,
+              timestamp: new Date()
+            };
+
+            setMessages(prev => [...prev, userMessage]);
+            setInput('');
+
+            setTimeout(() => {
+              let botResponse = '';
+
+              switch (stage) {
+                case 'awaitingPoP':
+                  setPopData(input);
+                  botResponse = `Thank you for sharing your Problem of Practice. To help me identify the most relevant educational theories for your specific situation, I need to understand the context where you plan to implement your intervention.\n\nPlease provide a short paragraph that includes:\n• Demographics of participants (age, grade level, socioeconomic background, etc.)\n• Environment description (type of school/institution, urban/rural setting, resources available)\n• Other relevant contextual information (cultural considerations, previous interventions, specific challenges)`;
+                  setStage('awaitingContext');
+                  break;
+
+                case 'awaitingContext':
+                  setContextData(input);
+                  const contextWords = input.split(' ').length;
+                  
+                  if (contextWords < 30) {
+                    botResponse = "I appreciate the information you've provided. To better match theories to your specific situation, could you please elaborate on the demographics of your participants and the specific environment where you'll be implementing your intervention?";
+                  } else {
+                    botResponse = "Thank you for this information. I will now research applicable educational theories related to your problem of practice and your specific context.";
+                    setStage('presentingTheories');
+                    
+                    setTimeout(() => {
+                      const theoryList = theories[theoryListVersion].map((theory, index) => 
+                        `${index + 1}. **${theory.name}**\n   • Key Researchers: ${theory.researchers.join(', ')}\n   • Relevance to Your PoP: This theory specifically addresses ${theory.relevance} by providing frameworks for understanding and intervening in these areas.`
+                      ).join('\n\n');
+
+                      const theoryMessage = {
+                        type: 'bot',
+                        content: `Based on your Problem of Practice and context, here are educational learning theories that may be applicable:\n\n${theoryList}\n\nDo any theories on this list look like a particularly good match to your problem of practice? If so, please tell me which one so I can provide you with more details.`,
+                        timestamp: new Date()
+                      };
+                      setMessages(prev => [...prev, theoryMessage]);
+                    }, 2000);
+                  }
+                  break;
+
+                case 'presentingTheories':
+                  const lowerInput = input.toLowerCase();
+                  
+                  if (lowerInput.includes('no') || lowerInput.includes('none')) {
+                    if (theoryListVersion === 1) {
+                      botResponse = "Ok, no problem, let me give you a few more theories to consider.";
+                      setTheoryListVersion(2);
+                      
+                      setTimeout(() => {
+                        const theoryList = theories[2].map((theory, index) => 
+                          `${index + 1}. **${theory.name}**\n   • Key Researchers: ${theory.researchers.join(', ')}\n   • Relevance to Your PoP: This theory specifically addresses ${theory.relevance} by providing frameworks for understanding and intervening in these areas.`
+                        ).join('\n\n');
+
+                        const theoryMessage = {
+                          type: 'bot',
+                          content: `Here are some additional theories that might be relevant:\n\n${theoryList}\n\nDo any theories on this list look like a particularly good match to your problem of practice? If so, please tell me which one so I can provide you with more details.`,
+                          timestamp: new Date()
+                        };
+                        setMessages(prev => [...prev, theoryMessage]);
+                      }, 1500);
+                    } else {
+                      botResponse = "I understand. Would you like me to help you think about your problem of practice from a different angle? Sometimes reframing the problem can help identify more suitable theoretical frameworks. Or would you prefer to explore how to combine multiple theories to address different aspects of your problem?";
+                    }
+                  } else {
+                    // Check if user mentioned a specific theory
+                    let foundTheory = null;
+                    const allTheories = [...theories[1], ...theories[2]];
+                    
+                    for (const theory of allTheories) {
+                      if (lowerInput.includes(theory.name.toLowerCase()) || 
+                          theory.researchers.some(r => lowerInput.includes(r.toLowerCase().split(' ').pop()))) {
+                        foundTheory = theory.name;
+                        break;
+                      }
+                    }
+
+                    if (foundTheory && theoryDetails[foundTheory]) {
+                      const details = theoryDetails[foundTheory];
+                      botResponse = `Excellent choice! Let me provide you with more details about **${foundTheory}**:\n\n**Overview:**\n${details.overview}\n\n**Key Principles:**\n${details.principles.map(p => `• ${p}`).join('\n')}\n\n**Applications in Similar Contexts:**\n${details.applications}\n\n**Seminal Works:**\n${details.seminalWorks.map(w => `• ${w}`).join('\n')}\n\n**Methodological Considerations for Action Research:**\nWhen applying this theory to your action research, consider:\n• How the theory's principles can guide your intervention design\n• What data collection methods align with this theoretical framework\n• How you'll measure changes based on the theory's key concepts\n\nWould you like me to help you think about how to specifically apply this theory to your problem of practice, or would you like to explore another theory?`;
+                      setSelectedTheory(foundTheory);
+                      setStage('theorySelected');
+                    } else {
+                      botResponse = "I'm not sure which theory you're referring to. Could you please specify which theory from the list you'd like to know more about? You can mention the theory name or the number from the list.";
+                    }
+                  }
+                  break;
+
+                case 'theorySelected':
+                  if (lowerInput.includes('apply') || lowerInput.includes('specific')) {
+                    botResponse = `Let's think about applying ${selectedTheory} to your specific context. Based on your Problem of Practice and context, here are some considerations:\n\n1. **Intervention Design**: How might the principles of this theory shape your intervention activities?\n\n2. **Data Collection**: What evidence would demonstrate the theory in action?\n\n3. **Success Indicators**: How will you know if the theoretical principles are making a difference?\n\nWould you like to explore any of these areas in more detail?`;
+                  } else if (lowerInput.includes('another') || lowerInput.includes('different')) {
+                    botResponse = "Of course! Which other theory would you like to explore? You can choose from the lists I provided earlier, or I can suggest some new theories if you'd prefer.";
+                    setStage('presentingTheories');
+                  } else {
+                    botResponse = "How else can I help you with connecting educational theories to your Problem of Practice? Would you like to explore implementation strategies, look at another theory, or discuss how to integrate multiple theories?";
+                  }
+                  break;
+
+                default:
+                  botResponse = "I'm here to help you connect educational theories to your Problem of Practice. What would you like to explore?";
+              }
+
+              if (botResponse) {
+                const botMessage = {
+                  type: 'bot',
+                  content: botResponse,
+                  timestamp: new Date()
+                };
+                setMessages(prev => [...prev, botMessage]);
+              }
+            }, 1000);
+          };
+
+          const handleKeyPress = (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              handleSendMessage();
+            }
+          };
+
+          // Auto-scroll to bottom when new messages appear
+          React.useEffect(() => {
+            const messagesContainer = document.getElementById('messages-container');
+            if (messagesContainer) {
+              messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+          }, [messages]);
+
+          return (
+            <div className="flex flex-col h-screen bg-gray-50">
+              {/* Header */}
+              <div className="bg-blue-600 text-white p-4 shadow-lg">
+                <div className="max-w-4xl mx-auto flex items-center gap-3">
+                  <Book />
+                  <h1 className="text-xl font-semibold">Educational Theory Assistant for Action Research</h1>
+                </div>
+              </div>
+
+              {/* Messages Container */}
+              <div id="messages-container" className="flex-1 overflow-y-auto p-4">
+                <div className="max-w-4xl mx-auto space-y-4">
+                  {messages.map((message, index) => (
+                    <div
+                      key={index}
+                      className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
+                    >
+                      <div
+                        className={`max-w-3xl rounded-lg p-4 ${
+                          message.type === 'user'
+                            ? 'bg-blue-500 text-white'
+                            : 'bg-white border border-gray-200 shadow-sm'
+                        }`}
+                      >
+                        <div className="flex items-start gap-3">
+                          {message.type === 'bot' && (
+                            <div className="bg-blue-100 rounded-full p-2">
+                              <Book />
+                            </div>
+                          )}
+                          <div className="flex-1">
+                            <div className="whitespace-pre-wrap">{message.content}</div>
+                            <div className={`text-xs mt-2 ${
+                              message.type === 'user' ? 'text-blue-100' : 'text-gray-400'
+                            }`}>
+                              {message.timestamp.toLocaleTimeString()}
+                            </div>
+                          </div>
+                          {message.type === 'user' && (
+                            <div className="bg-blue-600 rounded-full p-2">
+                              <User />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Input Area */}
+              <div className="border-t bg-white p-4">
+                <div className="max-w-4xl mx-auto">
+                  <div className="flex gap-3">
+                    <textarea
+                      value={input}
+                      onChange={(e) => setInput(e.target.value)}
+                      onKeyPress={handleKeyPress}
+                      placeholder="Type your message here..."
+                      className="flex-1 p-3 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      rows="3"
+                    />
+                    <button
+                      onClick={handleSendMessage}
+                      className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+                    >
+                      <Send />
+                      Send
+                    </button>
+                  </div>
+                  <div className="mt-2 text-xs text-gray-500 flex items-center gap-1">
+                    <Info />
+                    Press Enter to send, Shift+Enter for new line
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<EducationalTheoryBot />);
+    </script>
+</body>
+</html>
